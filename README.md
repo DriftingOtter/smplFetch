@@ -1,4 +1,8 @@
 ![smpleFetch](https://github.com/DriftingOtter/smplfetch/blob/main/smplfetch_Useage.png)
+```
+How it looks to run the script...
+(on the left terminal, it shows the script with the additional arg for a color strip)*
+```
 
 # smplFetch 🍎
 a simple python fetch script for linux.

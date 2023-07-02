@@ -1,4 +1,4 @@
-![smpleFetch]()
+![smpleFetch](https://github.com/DriftingOtter/smplfetch/blob/main/smplfetch_Useage.png)
 
 # smplFetch 🍎
 a simple python fetch script for linux.
@@ -15,5 +15,67 @@ Yes, I will probably rebuilding another version of this script in C once I have 
 
 ___Also maybe in Rust if I feel up to it...___
 
-### Authors
+## How to run the script without going into script directory?
+
+### Make a python script:
+```
+cd /home/el/bin
+touch stuff.py
+chmod +x stuff.py
+```
+
+### Find out where your python is:
+```
+which python
+/usr/bin/python
+```
+
+### Put this code in there:
+```
+#!/usr/bin/python
+print "hi"
+```
+
+### Run in it the same directory:
+```
+python stuff.py
+```
+
+### Go up a directory and it's not available:
+```
+cd ..
+stuff.py
+
+-bash: stuff.py: command not found
+```
+
+### Not found! It's as we expect, add the file path of the python file to the $PATH
+```
+vi ~/.bashrc
+```
+
+### Add the file:
+```
+export PATH=$PATH:/home/el/bin
+```
+
+### Save it out, re apply the .bashrc, and retry
+```
+source ~/.bashrc
+```
+
+### Try again:
+```
+cd /home/el
+stuff.py
+```
+
+### Prints:
+```
+hi
+```
+
+___(if anyone can tell me the orginal person that wrote this response on StackOverflow that would be a great help. As I would like to give credit to them 😅)___
+
+## Authors
 Daksh Kaul (aka. me) 🦦

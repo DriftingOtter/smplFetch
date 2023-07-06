@@ -13,6 +13,7 @@ char* get_KernelName();
 char* get_KernelXver();
 long get_usedMEM();
 long get_totalMEM();
+int get_batteryPercentage();
 
 
 int main(int argc, char *argv[])
@@ -48,7 +49,11 @@ int main(int argc, char *argv[])
     long usedMEM = get_usedMEM();
     long totalMEM = get_totalMEM();
 
-    printf("Memory: %ldGB/%ldGB", usedMEM, totalMEM);
+    printf("Memory: %ldGB/%ldGB\n", usedMEM, totalMEM);
+
+    // Holding Current Battery Percentage
+    int batteryPercentage = get_batteryPercentage();
+    printf("Battery: %i%%\n", batteryPercentage);
 
     return 0;
 }
@@ -230,3 +235,41 @@ long get_totalMEM()
     return totalMemoryGB;
 }
 
+int get_batteryPercentage()
+{
+    char path[256];
+    char line[256];
+    int capacity;
+
+    FILE* file = fopen("/sys/class/power_supply/BAT0/capacity", "r");
+
+    // Checking both locations for battery percentage info
+    if (file == NULL) 
+    {
+        file = fopen("/sys/class/power_supply/BAT1/capacity", "r");
+
+        if (file == NULL)
+        {
+            perror("Failed to open battery capacity file.\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    if (fgets(line, sizeof(line), file) != NULL) 
+    {
+        // Remove trailing newline character
+        line[strcspn(line, "\n")] = '\0';
+
+        // Convert the string to an integer
+        capacity = atoi(line);
+    }
+    else
+    {
+        perror("Error in allocating battery percentage.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    fclose(file);
+
+    return capacity;
+}

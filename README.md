@@ -8,7 +8,7 @@ How it looks to run the script...
 a simple python fetch script for linux.
 with some cool art :)*
 
-## How is it differnt from other fetch scripts?
+## How is it different from other fetch scripts?
 Even though this script was made only for me it still has some cool things I wanted to share, like the randomly genereated matrix art.
 
 ## Compatability

@@ -7,6 +7,17 @@
 #include <unistd.h>
 
 
+#define ANSI_COLOR_BLACK   "\e[0;30m"
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_WHITE   "\033[37m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+
+
 char* get_Usr();
 char* get_Distro();
 char* get_KernelName();
@@ -14,6 +25,7 @@ char* get_KernelXver();
 long get_usedMEM();
 long get_totalMEM();
 int get_batteryPercentage();
+void generate_ColorStrip();
 
 
 int main(int argc, char *argv[])
@@ -55,6 +67,19 @@ int main(int argc, char *argv[])
     int batteryPercentage = get_batteryPercentage();
     printf("Battery: %i%%\n", batteryPercentage);
 
+
+    // Checking for color strip flag
+    if (argc > 1 && strcmp(argv[1], "-cs") == 0)
+    {
+        generate_ColorStrip();
+    }
+    else if (argc > 1)
+    {
+        perror(ANSI_COLOR_RED "Invalid command-line argument. Please use the '-cs' flag to generate the color strip." ANSI_COLOR_RESET);
+        exit(EXIT_FAILURE);
+    }
+
+
     return 0;
 }
 
@@ -67,7 +92,7 @@ char* get_KernelName()
     // Retrieve system information into struct
     if (uname(&kernelInfo) != 0) 
     {
-        perror("uname doesn't return 0, so there is an error\n");
+        perror(ANSI_COLOR_RED "uname doesn't return 0, so there is an error\n" ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -78,7 +103,7 @@ char* get_KernelName()
     // Allocate memory for the kernel name
     if (sysname == NULL) 
     {
-        perror("Failed to allocate memory\n");
+        perror(ANSI_COLOR_RED "Failed to allocate memory\n" ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -98,7 +123,7 @@ char* get_KernelXver()
     // Retrieve system information into struct
     if (uname(&kernelInfo) != 0) 
     {
-        perror("uname doesn't return 0, so there is an error\n");
+        perror(ANSI_COLOR_RED "uname doesn't return 0, so there is an error\n" ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -109,7 +134,7 @@ char* get_KernelXver()
     // Allocate memory for the kernel version
     if (xVer == NULL) 
     {
-        perror("Failed to allocate memory\n");
+        perror(ANSI_COLOR_RED "Failed to allocate memory\n" ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -132,7 +157,7 @@ char* get_Usr()
     // Checking for no memory allocation error
     if (usr == NULL)
     {
-        perror("Failed to allocate memory\n");
+        perror(ANSI_COLOR_RED "Failed to allocate memory\n" ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -145,6 +170,7 @@ char* get_Usr()
     return usr;
 }
 
+
 char* get_Distro()
 {
     // Making pointer for File
@@ -153,7 +179,7 @@ char* get_Distro()
     // Error checking for file locating action
     if (file == NULL)
     {
-        perror("Failed to open file.\n");
+        perror(ANSI_COLOR_RED "Failed to open ditro (/etc/os-release) file.\n" ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -163,14 +189,14 @@ char* get_Distro()
 
     if (buffer == NULL)
     {
-        perror("Memory allocation failed.\n");
+        perror(ANSI_COLOR_RED "Memory allocation failed.\n" ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
     }
 
     // Read the first line of the file
     if (fgets(buffer, 256, file) == NULL)
     {
-        perror("Error reading file.\n");
+        perror(ANSI_COLOR_RED "Error reading to buffer.\n" ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -197,15 +223,19 @@ char* get_Distro()
     return buffer;
 }
 
+
 long get_usedMEM()
 {
     struct sysinfo info;
     long usedMemory;
 
-    if (sysinfo(&info) == 0) {
+    if (sysinfo(&info) == 0) 
+    {
         usedMemory = (info.totalram - info.freeram) * info.mem_unit;
-    } else {
-        perror("Error In Getting RAM data.\n");
+    } 
+    else 
+    {
+        perror(ANSI_COLOR_RED "Error In Getting RAM data.\n" ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -216,15 +246,19 @@ long get_usedMEM()
     return usedMemoryGB;
 }
 
+
 long get_totalMEM()
 {
     struct sysinfo info;
     long totalMemory;
 
-    if (sysinfo(&info) == 0) {
+    if (sysinfo(&info) == 0)
+    {
         totalMemory = info.totalram * info.mem_unit;
-    } else {
-        perror("Error In Getting RAM data.\n");
+    } 
+    else 
+    {
+        perror(ANSI_COLOR_RED "Error In Getting RAM data.\n" ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
     }
 
@@ -234,6 +268,7 @@ long get_totalMEM()
 
     return totalMemoryGB;
 }
+
 
 int get_batteryPercentage()
 {
@@ -250,7 +285,7 @@ int get_batteryPercentage()
 
         if (file == NULL)
         {
-            perror("Failed to open battery capacity file.\n");
+            perror(ANSI_COLOR_RED "Failed to open battery capacity file.\n" ANSI_COLOR_RESET);
             exit(EXIT_FAILURE);
         }
     }
@@ -265,11 +300,26 @@ int get_batteryPercentage()
     }
     else
     {
-        perror("Error in allocating battery percentage.\n");
+        perror(ANSI_COLOR_RED "Error in allocating battery percentage.\n" ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
     }
 
     fclose(file);
 
     return capacity;
+}
+
+
+void generate_ColorStrip()
+{
+    char* coloredBlock = "███";
+
+    printf(ANSI_COLOR_BLACK   "\n%s" ANSI_COLOR_RESET, coloredBlock);
+    printf(ANSI_COLOR_RED     "%s" ANSI_COLOR_RESET, coloredBlock);
+    printf(ANSI_COLOR_GREEN   "%s" ANSI_COLOR_RESET, coloredBlock);
+    printf(ANSI_COLOR_YELLOW  "%s" ANSI_COLOR_RESET, coloredBlock);
+    printf(ANSI_COLOR_BLUE    "%s" ANSI_COLOR_RESET, coloredBlock);
+    printf(ANSI_COLOR_MAGENTA "%s" ANSI_COLOR_RESET, coloredBlock);
+    printf(ANSI_COLOR_CYAN    "%s" ANSI_COLOR_RESET, coloredBlock);
+    printf(ANSI_COLOR_WHITE   "%s\n" ANSI_COLOR_RESET, coloredBlock);
 }

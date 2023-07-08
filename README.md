@@ -82,4 +82,8 @@ hi
 ___(if anyone can tell me the orginal person that wrote this response on StackOverflow that would be a great help. As I would like to give credit to them 😅)___
 
 ## Authors
-Daksh Kaul (aka. me) 🦦
+- Daksh Kaul (aka. me) 🦦
+
+## Acknowledgements
+- fontawesome (for otter glyph) 
+

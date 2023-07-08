@@ -312,7 +312,7 @@ int get_batteryPercentage()
 
 void generate_ColorStrip()
 {
-    char* coloredBlock = "███";
+    char* coloredBlock = "  ";
 
     printf(ANSI_COLOR_BLACK   "\n%s" ANSI_COLOR_RESET, coloredBlock);
     printf(ANSI_COLOR_RED     "%s" ANSI_COLOR_RESET, coloredBlock);

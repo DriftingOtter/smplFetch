@@ -5,6 +5,7 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 
 
 #define ANSI_COLOR_BLACK   "\e[0;30m"
@@ -22,6 +23,7 @@ char* get_Usr();
 char* get_Distro();
 char* get_KernelName();
 char* get_KernelXver();
+char* get_CurrentTime();
 long get_usedMEM();
 long get_totalMEM();
 int get_batteryPercentage();
@@ -30,6 +32,17 @@ void generate_ColorStrip();
 
 int main(int argc, char *argv[])
 {
+    //Holds Current Time
+    char* currentTime = get_CurrentTime();
+
+    printf("⎧                          ⎫\n");
+    printf("⎮        ⎮%s⎮        ⎮\n", currentTime);
+    printf("⎩                          ⎭\n");
+
+    // Realocating Memory To System
+    free(currentTime);
+
+
     // Holding Current User Name
     char* usr = get_Usr();
     printf("User:   %s\n", usr);
@@ -322,4 +335,27 @@ void generate_ColorStrip()
     printf(ANSI_COLOR_MAGENTA "%s" ANSI_COLOR_RESET, coloredBlock);
     printf(ANSI_COLOR_CYAN    "%s" ANSI_COLOR_RESET, coloredBlock);
     printf(ANSI_COLOR_WHITE   "%s\n" ANSI_COLOR_RESET, coloredBlock);
+}
+
+
+char* get_CurrentTime()
+{
+    time_t currentTime;
+    struct tm* localTime;
+
+    char* timeString = (char*) malloc(sizeof(char) * 9);
+
+    // Obtain current time
+    currentTime = time(NULL);
+
+    // Convert the current time to the local time
+    localTime = localtime(&currentTime);
+
+    // Format the local time as a string
+    sprintf(timeString, "%02d:%02d:%02d",
+            localTime->tm_hour,
+            localTime->tm_min,
+            localTime->tm_sec);
+
+    return timeString;
 }

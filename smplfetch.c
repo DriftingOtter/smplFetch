@@ -43,6 +43,9 @@ int main(int argc, char *argv[])
     free(currentTime);
 
 
+    printf("\n");
+
+    
     // Holding Current User Name
     char* usr = get_Usr();
     printf("User:   %s\n", usr);
@@ -343,7 +346,7 @@ char* get_CurrentTime()
     time_t currentTime;
     struct tm* localTime;
 
-    char* timeString = (char*) malloc(sizeof(char) * 9);
+    char* timeString = (char*) malloc(sizeof(char) * 9); // Increase buffer size to 9
 
     // Obtain current time
     currentTime = time(NULL);
@@ -351,11 +354,17 @@ char* get_CurrentTime()
     // Convert the current time to the local time
     localTime = localtime(&currentTime);
 
-    // Format the local time as a string
-    sprintf(timeString, "%02d:%02d:%02d",
-            localTime->tm_hour,
+    // Determine AM or PM
+    const char* meridian = (localTime->tm_hour >= 12) ? "PM" : "AM";
+
+    // Convert to 12-hour format
+    int hour12 = (localTime->tm_hour % 12 == 0) ? 12 : localTime->tm_hour % 12;
+
+    // Format the local time as a string in 12-hour format without seconds
+    sprintf(timeString, "%02d:%02d %s",
+            hour12,
             localTime->tm_min,
-            localTime->tm_sec);
+            meridian);
 
     return timeString;
 }

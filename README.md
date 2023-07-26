@@ -1,7 +1,7 @@
-![smpleFetch](https://github.com/DriftingOtter/smplfetch/blob/main/smplfetch_Useage.png)
+![smpleFetch](https://github.com/DriftingOtter/smplFetch/blob/main/smplFetch_C_Py.png)
 ```
 How it looks to run the script...
-(on the left terminal, it shows the script with the additional arg for a color strip)*
+(on the left it shows the C impl and on the right, Python*)
 ```
 
 # smplFetch 🍎

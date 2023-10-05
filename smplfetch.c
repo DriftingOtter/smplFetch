@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     //Holds Current Time
     char* currentTime = get_CurrentTime();
 
-    printf("⎧                          ⎫\n");
+    printf("\n⎧                          ⎫\n");
     printf("⎮        ⎮%s⎮        ⎮\n", currentTime);
     printf("⎩                          ⎭\n");
 

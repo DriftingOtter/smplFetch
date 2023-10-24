@@ -6,31 +6,36 @@ import psutil
 import random
 from colorama import init, Style
 from termcolor import colored
+
 init()
 
-colors = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white']
 
 def get_Distro():
     distro = platform.node()
     return distro
 
+
 def get_OS():
     operatingSystem = platform.system()
     return operatingSystem
+
 
 def get_Xver():
     xVer = platform.machine()
     return xVer
 
+
 def get_SysMemoryTotal():
     totalMem = psutil.virtual_memory()
-    totalMem = round(totalMem.total / (1024 ** 3))
+    totalMem = round(totalMem.total / (1024**3))
     return totalMem
+
 
 def get_SysMemoryUsed():
     usedMem = psutil.virtual_memory()
-    usedMem = round(usedMem.used / (1024 ** 3))
+    usedMem = round(usedMem.used / (1024**3))
     return usedMem
+
 
 def get_Usr():
     users = psutil.users()
@@ -40,6 +45,7 @@ def get_Usr():
         usr = "Unknown"
     return usr
 
+
 def get_Battery():
     battery = psutil.sensors_battery()
     if battery:
@@ -48,11 +54,10 @@ def get_Battery():
         battery = "Unknown"
     return battery
 
+
 def generate_MatrixArt():
     # ASCII Art - Zero Matrix
-    artMatrix = [[0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 0]]
+    artMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
 
     # Flag for If Random Art Is Empty
     emptyMatrix = True
@@ -60,7 +65,6 @@ def generate_MatrixArt():
     # Randomly set a value for the ASCII Art Matrix
     for i in range(len(artMatrix)):
         for j in range(len(artMatrix[i])):
-
             if random.randint(0, 1) == 1:
                 artMatrix[i][j] = 1
 
@@ -70,17 +74,18 @@ def generate_MatrixArt():
         row = []
         hasColor = False  # Flag to track if the row has any colored elements
         for j in range(len(artMatrix[i])):
-
             if artMatrix[i][j] == 1:
-                row.append(colored('███', colors[random.randint(0, 7)]))
+                row.append(colored("███", colors[random.randint(0, 7)]))
                 emptyMatrix = False
                 hasColor = True
 
             else:
-                row.append(colored('   ', 'white'))
+                row.append(colored("   ", "white"))
 
         if not hasColor:
-            row.append(colored('   ', 'white'))  # Add a default value to the row if no colors present
+            row.append(
+                colored("   ", "white")
+            )  # Add a default value to the row if no colors present
 
         coloredMatrix.append(row)
 
@@ -90,37 +95,24 @@ def generate_MatrixArt():
     else:
         return coloredMatrix
 
-def generate_ColorStrip():
 
-    # Printing Color Spectrum (Bright Colors)
-    i = 0
-    while i < 7:
+def generate_MatrixArt(rows=3, cols=5):
+    colors = ["red", "green", "yellow", "blue", "magenta", "cyan", "white"]
+    artMatrix = [[random.choice([0, 1]) for _ in range(cols)] for _ in range(rows)]
+    emptyMatrix = all(all(cell == 0 for cell in row) for row in artMatrix)
 
-        if i == 0:
-            print("  ", end='', sep='')
+    coloredMatrix = []
+    for row in artMatrix:
+        coloredRow = [
+            colored("███", colors[random.randint(0, 6)]) if cell == 1 else colored("   ", "white")
+            for cell in row
+        ]
+        coloredMatrix.append(coloredRow)
 
-        x = colored('███', colors[i])
-        print(x, end='', sep='')
-
-        i += 1
-
-        if i == 7:
-            print("")
-
-    # Printing Color Spectrum (Dim Colors)
-    j = 0
-    while j < 7:
-
-        if j == 0:
-            print("  ", end='', sep='')
-
-        x = colored('███', colors[j])
-        print(Style.DIM + x, end='', sep='')
-        
-        j += 1
-
-        if j == 7:
-            print("")
+    if emptyMatrix:
+        return generate_MatrixArt(rows, cols)
+    else:
+        return coloredMatrix
 
 
 
@@ -128,7 +120,7 @@ def generate_ColorStrip():
 resultMatrix = generate_MatrixArt()
 
 for row in resultMatrix:
-    print("  ", "".join(row), "\n", end='', sep='')
+    print("  ", "".join(row), "\n", end="", sep="")
 
 
 # Printing Sys Info
@@ -146,7 +138,7 @@ args = sys.argv
 try:
     if len(args) > 1:
         if args[1] == "-cs" or args[1] == "--cs":
-            generate_ColorStrip()
+            generate_MatrixArt()
         else:
             raise ValueError("Incorrect argument")
     else:
@@ -158,4 +150,6 @@ except IndexError:
 
 # If garbage args are given
 except ValueError:
-    print(colored("Incorrect argument. Please use '-cs' to display a color strip.", "red"))
+    print(
+        colored("Incorrect argument. Please use '-cs' to display a color strip.", "red")
+    )

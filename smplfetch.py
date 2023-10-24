@@ -61,6 +61,7 @@ def generate_MatrixArt(rows=3, cols=5):
 
 
 
+
 def generate_ColorStrip():
     colors = [Fore.BLACK, Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.BLUE, Fore.MAGENTA, Fore.CYAN, Fore.WHITE]
 
@@ -87,11 +88,13 @@ def main():
 
 
     # Printing Sys Info
-    used_mem, total_mem = get_SysMemory()
-    print(f"    User: {get_Usr()}")
+    print(Fore.RESET + f"    User: {get_Usr()}")
     print(f"    Distro: {get_Distro()}")
     print(f"    Kernel: {get_OS()}")
+
+    used_mem, total_mem = get_SysMemory()
     print(f"    Memory*: {used_mem}GB / {total_mem}GB")
+
     print(f"    Battery: {get_Battery()}%")
 
 

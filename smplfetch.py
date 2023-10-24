@@ -46,11 +46,10 @@ def generate_MatrixArt(rows=3, cols=5):
     artMatrix = [[random.choice([0, 1]) for _ in range(cols)] for _ in range(rows)]
     emptyMatrix = all(all(cell == 0 for cell in row) for row in artMatrix)
 
-
     coloredMatrix = []
     for row in artMatrix:
         coloredRow = [
-            colors[cell] + "███" if cell == 1 else Fore.WHITE + "  "
+            random.choice(colors) + "███" if cell == 1 else Fore.WHITE + "  "
             for cell in row
         ]
         coloredMatrix.append(coloredRow)
@@ -65,7 +64,7 @@ def generate_MatrixArt(rows=3, cols=5):
 def generate_ColorStrip():
     colors = [Fore.BLACK, Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.BLUE, Fore.MAGENTA, Fore.CYAN, Fore.WHITE]
 
-    for i in range(2): # Bright and dim colors
+    for i in range(1): # Bright and dim colors
         print("  ", end="")
         for color in colors:
             print(color + "███", end="")

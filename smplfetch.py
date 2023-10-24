@@ -1,110 +1,56 @@
-#!/sbin/python
+#!/usr/bin/env python3
 
-import sys
 import platform
 import psutil
 import random
-from colorama import init, Style
-from termcolor import colored
+import argparse
+from colorama import init, Fore
+
 
 init()
 
 
+
 def get_Distro():
-    distro = platform.node()
-    return distro
+    return platform.node()
+
 
 
 def get_OS():
-    operatingSystem = platform.system()
-    return operatingSystem
+    return f"{platform.system()} | {platform.machine()}"
 
 
-def get_Xver():
-    xVer = platform.machine()
-    return xVer
 
+def get_SysMemory():
+    memory = psutil.virtual_memory()
+    total_mem = round(memory.total / (1024**3))
+    used_mem = round(memory.used / (1024**3))
+    return used_mem, total_mem
 
-def get_SysMemoryTotal():
-    totalMem = psutil.virtual_memory()
-    totalMem = round(totalMem.total / (1024**3))
-    return totalMem
-
-
-def get_SysMemoryUsed():
-    usedMem = psutil.virtual_memory()
-    usedMem = round(usedMem.used / (1024**3))
-    return usedMem
 
 
 def get_Usr():
     users = psutil.users()
-    if users:
-        usr = users[0].name
-    else:
-        usr = "Unknown"
-    return usr
+    return users[0].name if users else "Unknown"
+
 
 
 def get_Battery():
     battery = psutil.sensors_battery()
-    if battery:
-        battery = round(battery.percent)
-    else:
-        battery = "Unknown"
-    return battery
+    return round(battery.percent) if battery else "Unknown"
 
-
-def generate_MatrixArt():
-    # ASCII Art - Zero Matrix
-    artMatrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-
-    # Flag for If Random Art Is Empty
-    emptyMatrix = True
-
-    # Randomly set a value for the ASCII Art Matrix
-    for i in range(len(artMatrix)):
-        for j in range(len(artMatrix[i])):
-            if random.randint(0, 1) == 1:
-                artMatrix[i][j] = 1
-
-    # Replace 1's and 0's with colors
-    coloredMatrix = []
-    for i in range(len(artMatrix)):
-        row = []
-        hasColor = False  # Flag to track if the row has any colored elements
-        for j in range(len(artMatrix[i])):
-            if artMatrix[i][j] == 1:
-                row.append(colored("███", colors[random.randint(0, 7)]))
-                emptyMatrix = False
-                hasColor = True
-
-            else:
-                row.append(colored("   ", "white"))
-
-        if not hasColor:
-            row.append(
-                colored("   ", "white")
-            )  # Add a default value to the row if no colors present
-
-        coloredMatrix.append(row)
-
-    # Redraw Art Matrix If Matrix Is Empty
-    if emptyMatrix:
-        return generate_MatrixArt()
-    else:
-        return coloredMatrix
 
 
 def generate_MatrixArt(rows=3, cols=5):
-    colors = ["red", "green", "yellow", "blue", "magenta", "cyan", "white"]
+    colors = [Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.BLUE, Fore.MAGENTA, Fore.CYAN, Fore.WHITE]
     artMatrix = [[random.choice([0, 1]) for _ in range(cols)] for _ in range(rows)]
     emptyMatrix = all(all(cell == 0 for cell in row) for row in artMatrix)
+
 
     coloredMatrix = []
     for row in artMatrix:
         coloredRow = [
-            colored("███", colors[random.randint(0, 6)]) if cell == 1 else colored("   ", "white")
+            colors[cell] + "███" if cell == 1 else Fore.WHITE + "  "
             for cell in row
         ]
         coloredMatrix.append(coloredRow)
@@ -116,40 +62,45 @@ def generate_MatrixArt(rows=3, cols=5):
 
 
 
-# Print Matrix Art
-resultMatrix = generate_MatrixArt()
+def generate_ColorStrip():
+    colors = [Fore.BLACK, Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.BLUE, Fore.MAGENTA, Fore.CYAN, Fore.WHITE]
 
-for row in resultMatrix:
-    print("  ", "".join(row), "\n", end="", sep="")
-
-
-# Printing Sys Info
-print(f"    User: {get_Usr()}")
-print(f"    Distro: {get_Distro()}")
-print(f"    Kernel: {get_OS()} | {get_Xver()}")
-print(f"    Memory*: {get_SysMemoryUsed()}GB / {get_SysMemoryTotal()}GB")
-print(f"    Battery: {get_Battery()}%")
+    for i in range(2): # Bright and dim colors
+        print("  ", end="")
+        for color in colors:
+            print(color + "███", end="")
+        print()
 
 
-# Gather script arguments
-args = sys.argv
 
-# Checks for Color Strip  args
-try:
-    if len(args) > 1:
-        if args[1] == "-cs" or args[1] == "--cs":
-            generate_MatrixArt()
-        else:
-            raise ValueError("Incorrect argument")
-    else:
-        raise IndexError("Missing argument")
+def main():
+    parser = argparse.ArgumentParser(description='Display system information.')
+    parser.add_argument('-cs', '--colorstrip', action='store_true', help='Display a color strip.')
 
-# If there are no ags commands, then don't show error
-except IndexError:
-    pass
+    args = parser.parse_args()
 
-# If garbage args are given
-except ValueError:
-    print(
-        colored("Incorrect argument. Please use '-cs' to display a color strip.", "red")
-    )
+
+    # Print Matrix Art
+    resultMatrix = generate_MatrixArt()
+
+    for row in resultMatrix:
+        print("  ", "".join(row), "\n", end="")
+
+
+    # Printing Sys Info
+    used_mem, total_mem = get_SysMemory()
+    print(f"    User: {get_Usr()}")
+    print(f"    Distro: {get_Distro()}")
+    print(f"    Kernel: {get_OS()}")
+    print(f"    Memory*: {used_mem}GB / {total_mem}GB")
+    print(f"    Battery: {get_Battery()}%")
+
+
+    # Check for color strip flag
+    if args.colorstrip:
+        generate_ColorStrip()
+
+
+if __name__ == "__main__":
+    main()
+

@@ -89,7 +89,7 @@ ___(if anyone can tell me the orginal person that wrote this response on StackOv
 ## Compilation Of The C Script
 One you have cloned/downloaded the script file run...
 ```
-gcc -o smplFetch smplfetch.c
+gcc -Wall -Wextra -Werror -fstack-protector-strong -D_FORTIFY_SOURCE=2 -Wformat-security -pie -fPIE -O3 -flto -funroll-loops -finline-functions -fomit-frame-pointer -o smplFetch smplfetch.c
 ```
 You don't have to use gcc, use what ever you like for C compilation.
 

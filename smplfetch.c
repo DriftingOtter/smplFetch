@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     //Holds Current Time
     char* currentTime = get_CurrentTime();
 
-    printf("\n⎧                          ⎫\n");
+    printf("⎧                          ⎫\n");
     printf("⎮        ⎮%s⎮        ⎮\n", currentTime);
     printf("⎩                          ⎭\n");
 
@@ -288,7 +288,6 @@ long get_totalMEM()
 
 int get_batteryPercentage()
 {
-    char path[256];
     char line[256];
     int capacity;
 
@@ -328,7 +327,7 @@ int get_batteryPercentage()
 
 void generate_ColorStrip()
 {
-    char* coloredBlock = "  ";
+    char* coloredBlock = "██";
 
     printf(ANSI_COLOR_BLACK   "\n%s" ANSI_COLOR_RESET, coloredBlock);
     printf(ANSI_COLOR_RED     "%s" ANSI_COLOR_RESET, coloredBlock);

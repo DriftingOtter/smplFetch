@@ -27,8 +27,7 @@ long get_totalMEM();
 int get_batteryPercentage();
 void generate_ColorStrip();
 
-int main(int argc, char *argv[]) {
-  // Holds Current Time
+int main(int argc, char *argv[]) { // Holds Current Time
   char *currentTime = get_CurrentTime();
 
   printf("⎧                          ⎫\n");

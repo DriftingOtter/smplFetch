@@ -1,7 +1,7 @@
 ![smpleFetch](assets/smplFetch.png)
 
 # smplFetch 🍎
-> a simple python fetch script for linux.
+> a simple C fetch script for linux.
 
 ## Compilation Of The C Script
 One you have cloned/downloaded the script file run...
